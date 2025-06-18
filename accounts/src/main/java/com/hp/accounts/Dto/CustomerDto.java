@@ -1,6 +1,5 @@
-package com.hp.accounts.DTO;
+package com.hp.accounts.Dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 @Data

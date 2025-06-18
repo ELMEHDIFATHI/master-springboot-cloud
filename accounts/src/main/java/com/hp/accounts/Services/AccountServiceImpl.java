@@ -1,15 +1,14 @@
 package com.hp.accounts.Services;
 
 import com.hp.accounts.Constants.AccountsConstant;
-import com.hp.accounts.DTO.CustomerDto;
+import com.hp.accounts.Dto.CustomerDto;
 import com.hp.accounts.Exception.CustomerAlerdyExsistException;
 import com.hp.accounts.Mapper.CustomerMapper;
-import com.hp.accounts.models.Accounts;
-import com.hp.accounts.models.Customer;
-import com.hp.accounts.repository.AccountsRepository;
-import com.hp.accounts.repository.CustomerRepository;
+import com.hp.accounts.Models.Accounts;
+import com.hp.accounts.Models.Customer;
+import com.hp.accounts.Repository.AccountsRepository;
+import com.hp.accounts.Repository.CustomerRepository;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

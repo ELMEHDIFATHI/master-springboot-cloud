@@ -1,6 +1,6 @@
-package com.hp.accounts.repository;
+package com.hp.accounts.Repository;
 
-import com.hp.accounts.models.Customer;
+import com.hp.accounts.Models.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

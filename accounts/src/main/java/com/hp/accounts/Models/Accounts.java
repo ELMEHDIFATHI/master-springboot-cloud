@@ -1,4 +1,4 @@
-package com.hp.accounts.models;
+package com.hp.accounts.Models;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,7 @@
 package com.hp.accounts.Mapper;
 
-import com.hp.accounts.DTO.AccountsDto;
-import com.hp.accounts.models.Accounts;
+import com.hp.accounts.Dto.AccountsDto;
+import com.hp.accounts.Models.Accounts;
 
 public class AccountMapper {
 

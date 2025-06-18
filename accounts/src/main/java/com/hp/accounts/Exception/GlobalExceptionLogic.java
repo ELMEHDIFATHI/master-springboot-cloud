@@ -1,8 +1,7 @@
 package com.hp.accounts.Exception;
 
 
-import com.hp.accounts.DTO.CustomerDto;
-import com.hp.accounts.DTO.ErrorResponseDto;
+import com.hp.accounts.Dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -2,14 +2,11 @@ package com.hp.accounts.Controller;
 
 
 import com.hp.accounts.Constants.AccountsConstant;
-import com.hp.accounts.DTO.AccountsDto;
-import com.hp.accounts.DTO.CustomerDto;
-import com.hp.accounts.DTO.ResponseDto;
+import com.hp.accounts.Dto.CustomerDto;
+import com.hp.accounts.Dto.ResponseDto;
 import com.hp.accounts.Services.IAccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

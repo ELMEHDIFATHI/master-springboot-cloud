@@ -1,8 +1,11 @@
 package com.hp.accounts.Services;
 
 import com.hp.accounts.Constants.AccountsConstant;
+import com.hp.accounts.Dto.AccountsDto;
 import com.hp.accounts.Dto.CustomerDto;
 import com.hp.accounts.Exception.CustomerAlerdyExsistException;
+import com.hp.accounts.Exception.ResourceNotFoundException;
+import com.hp.accounts.Mapper.AccountMapper;
 import com.hp.accounts.Mapper.CustomerMapper;
 import com.hp.accounts.Models.Accounts;
 import com.hp.accounts.Models.Customer;
@@ -29,11 +32,56 @@ public  class AccountServiceImpl implements IAccountService{
         if(optionalCustomer.isPresent()){
             throw new CustomerAlerdyExsistException("customer already exist"+customerDto.getMobileNumber());
         }
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("ANONYMOUS");
+
         Customer savedCustomer=customerRepository.save(customer);
         accountsRepository.save(createNewAccount(savedCustomer));
 
+    }
+
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new
+                        ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
+        );
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+        customerDto.setAccountsDto(AccountMapper.mapToAccountsDto(accounts, new AccountsDto()));
+        return customerDto;
+    }
+
+    @Override
+    public boolean UpdateAccount(CustomerDto customerDto) {
+        boolean isUpdated = false;
+        AccountsDto accountsDto = customerDto.getAccountsDto();
+        if(accountsDto !=null ){
+            Accounts accounts = accountsRepository.findById(accountsDto.getAccountNumber()).orElseThrow(
+                    () -> new ResourceNotFoundException("Account", "AccountNumber", accountsDto.getAccountNumber().toString())
+            );
+            AccountMapper.mapToAccounts(accountsDto, accounts);
+            accounts = accountsRepository.save(accounts);
+
+            Long customerId = accounts.getCustomerId();
+            Customer customer = customerRepository.findById(customerId).orElseThrow(
+                    () -> new ResourceNotFoundException("Customer", "CustomerID", customerId.toString())
+            );
+            CustomerMapper.mapToCustomer(customerDto,customer);
+            customerRepository.save(customer);
+            isUpdated = true;
+        }
+        return  isUpdated;
+    }
+
+    @Override
+    public boolean DeleteAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+        customerRepository.deleteById(customer.getCustomerId());
+        return true;
     }
 
     private Accounts createNewAccount(Customer customer) {
@@ -43,10 +91,14 @@ public  class AccountServiceImpl implements IAccountService{
         accounts.setAccountNumber(randomAccNumber);
         accounts.setAccountType(AccountsConstant.SAVINGS);
         accounts.setBranchAddress(AccountsConstant.ADDRESS);
-        accounts.setCreatedAt(LocalDateTime.now());
-        accounts.setCreatedBy("ANONYMOUS");
+
 
 
         return accountsRepository.save(accounts);
     }
+
+
+
+
+
 }

@@ -6,6 +6,7 @@ import com.hp.accounts.Dto.CustomerDto;
 import com.hp.accounts.Dto.ErrorResponseDto;
 import com.hp.accounts.Dto.ResponseDto;
 import com.hp.accounts.Services.IAccountService;
+
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -61,6 +62,7 @@ public class AccountsController {
                 .body(new ResponseDto(AccountsConstant.STATUS_201,AccountsConstant.MESSAGE_201));
     }
 
+
     @Operation(
             summary = "Fetch Account Details REST API",
             description = "REST API to fetch Customer &  Account details based on a mobile number"
@@ -79,6 +81,7 @@ public class AccountsController {
             )
     }
     )
+
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDto> fetchAccount(@RequestParam
                                                         @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
@@ -86,6 +89,7 @@ public class AccountsController {
         CustomerDto customerDto = accountService.fetchAccount(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
+
 
     @Operation(
             summary = "Update Account Details REST API",
@@ -109,6 +113,7 @@ public class AccountsController {
             )
     }
     )
+
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> UpdateAccount(@Valid @RequestBody  CustomerDto customerDto){
         boolean isUpdated = accountService.UpdateAccount(customerDto);
@@ -122,6 +127,7 @@ public class AccountsController {
                     .body(new ResponseDto(AccountsConstant.STATUS_417, AccountsConstant.MESSAGE_417_UPDATE));
         }
     }
+
 
     @Operation(
             summary = "Delete Account & Customer Details REST API",
@@ -145,6 +151,7 @@ public class AccountsController {
             )
     }
     )
+
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> DeleteAccount(@RequestParam
                                                          @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")

@@ -28,10 +28,14 @@ jobs:
       - name: Build and Test
         run: mvn -f ${{ matrix.service }}/pom.xml clean install
 
+
+
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: sonarsource/sonarqube-scan-action@v5.0.0
         with:
-          projectKey: master-springboot-cloud
-          organization: EL MEHDI FATHI
+            args: >
+              -Dsonar.projectKey= master-springboot-cloud
+              -Dsonar.organization= EL MEHDI FATHI
+              -Dsonar.host.url=https://sonarcloud.io
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

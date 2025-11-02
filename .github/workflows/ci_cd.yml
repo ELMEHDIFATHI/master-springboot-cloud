@@ -29,12 +29,9 @@ jobs:
         run: mvn -f ${{ matrix.service }}/pom.xml clean install
 
 
-
       - name: Build and analyze
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-              -Dsonar.projectKey=ELMEHDIFATHI_master-springboot-cloud \
+        run: mvn -f ${{ matrix.service }}/pom.xml clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+              -Dsonar.projectKey=ELMEHDIFATHI_${{ matrix.service }} \
               -Dsonar.organization=elmehdifathi \
               -Dsonar.host.url=https://sonarcloud.io
 

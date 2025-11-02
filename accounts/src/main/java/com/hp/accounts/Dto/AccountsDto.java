@@ -26,15 +26,8 @@ public class AccountsDto {
             description = "Account type of Eazy Bank account", example = "Savings"
     )
     private String accountType;
-    @NotEmpty(message = "BranchAddress can not be a null or empty")
-    @Schema(
-            description = "Eazy Bank branch address", example = "123 NewYork"
-    )
 
-    private Long accountNumber;
-    @NotEmpty(message = "AccountType can not be a null or empty")
-    private String accountType;
+
     @NotEmpty(message = "BranchAddress can not be a null or empty")
->>>>>>> develop
     private String branchAddress;
 }

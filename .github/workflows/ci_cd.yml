@@ -2,9 +2,11 @@ name: CI/CD Spring Boot
 
 on:
   push:
-    branches: [develop]
+    branches:
+      - develop
   pull_request:
-    branches: [develop]
+    branches:
+      - develop
 
 jobs:
   build:
@@ -14,22 +16,34 @@ jobs:
         service: [accounts, cards, loans]
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: 21
 
-      - name: Build & Test
+      # 3️⃣ Cache Maven packages
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # 4️⃣ Build & Test
+      - name: Build and Test
         run: mvn -f ${{ matrix.service }}/pom.xml clean install
 
+      # 5️⃣ SonarCloud Analysis
       - name: SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -f ${{ matrix.service }}/pom.xml verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-          -Dsonar.projectKey=ELMEHDIFATHI_${{ matrix.service }} \
+          -Dsonar.projectKey=ELMEHDIFATHI_master-springboot-cloud \
           -Dsonar.organization=elmehdifathi \
           -Dsonar.host.url=https://sonarcloud.io

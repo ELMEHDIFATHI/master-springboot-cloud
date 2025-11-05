@@ -4,7 +4,7 @@ pipeline {
     environment {
 		// Jenkins credentials for SonarCloud and GitHub
         SONAR_TOKEN = credentials('SONAR_TOKEN')         // Secret text in Jenkins credentials
-        GITHUB_CREDENTIALS = credentials('GITHUB_TOKEN') // Secret text in Jenkins credentials
+        GITHUB_TOKEN = credentials('GITHUB_TOKEN') // Secret text in Jenkins credentials
 
         JAVA_HOME = "C:\\Program Files\\Java\\jdk-21"     // Adjust to your JDK path
         PATH = "${env.JAVA_HOME}\\bin;C:\\apache-maven\\bin;${env.PATH}"

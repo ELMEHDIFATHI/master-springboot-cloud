@@ -1,14 +1,15 @@
 pipeline {
-	agent any
- environment {
-		SONAR_TOKEN = credentials('SONAR_TOKEN')
+    agent any
+
+    environment {
         JAVA_HOME = "C:\\Program Files\\Java\\jdk-21"
         PATH = "${env.JAVA_HOME}\\bin;C:\\apache-maven\\bin;${env.PATH}"
     }
+
     stages {
-		stage('Checkout') {
-			steps {
-				echo '🔄 Secure Checkout from GitHub'
+        stage('Checkout') {
+            steps {
+                echo "✅ Checking out develop branch"
                 checkout([
                     $class: 'GitSCM',
                     branches: [[name: '*/develop']],
@@ -20,19 +21,21 @@ pipeline {
             }
         }
 
-        stage('Build') {
-			steps {
-				bat 'mvn clean install -DskipTests'
+        stage('Build Accounts') {
+            steps {
+                dir('accounts') {
+                    bat 'mvn clean install -DskipTests'
+                }
             }
         }
     }
 
     post {
-		failure {
-			echo '❌ CI failed! Check console logs'
-        }
         success {
-			echo '✅ Build Success!'
+            echo "✅ Jenkins test successful!"
+        }
+        failure {
+            echo "❌ Jenkins test failed!"
         }
     }
 }

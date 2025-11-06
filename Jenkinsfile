@@ -60,7 +60,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
  steps {
-    withSonarQubeEnv('MySonarCloudServer') {
+    withSonarQubeEnv('MySonarQubeServer') {
       bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_master-springboot-cloud -Dsonar.organization=ELMEHDIFATHI'
     }
   }

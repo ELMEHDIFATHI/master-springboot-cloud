@@ -59,13 +59,11 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('MySonarQubeServer') {
-                    dir('accounts') { bat 'mvn sonar:sonar' }
-                    dir('cards') { bat 'mvn sonar:sonar' }
-                    dir('loans') { bat 'mvn sonar:sonar' }
-                }
-            }
+ steps {
+    withSonarQubeEnv('MySonarCloudServer') {
+      bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_master-springboot-cloud -Dsonar.organization=ELMEHDIFATHI'
+    }
+  }
         }
 
         stage('Package') {

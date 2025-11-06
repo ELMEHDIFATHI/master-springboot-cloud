@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven3'  // This must match the name you set in Jenkins Global Tool Configuration
-   
-    }
+    maven 'maven3'
+    jdk 'JDK21'
+}
+
     environment {
 
         PATH = "${env.MAVEN_HOME}\\bin;${env.PATH}"

@@ -1,12 +1,10 @@
 pipeline {
 	agent any
-
-    environment {
+ environment {
 		SONAR_TOKEN = credentials('SONAR_TOKEN')
         JAVA_HOME = "C:\\Program Files\\Java\\jdk-21"
         PATH = "${env.JAVA_HOME}\\bin;C:\\apache-maven\\bin;${env.PATH}"
     }
-
     stages {
 		stage('Checkout') {
 			steps {

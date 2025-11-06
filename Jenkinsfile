@@ -59,7 +59,7 @@ pipeline {
 
         stage('SonarCloud Analysis') {
     steps {
-        withSonarQubeEnv('MySonarCloudServer') {
+        withSonarQubeEnv('MySonarQubeServer') {
             dir('accounts') {
                 bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_accounts -Dsonar.organization=ELMEHDIFATHI'
             }

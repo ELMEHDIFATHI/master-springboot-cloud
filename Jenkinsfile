@@ -58,20 +58,21 @@ pipeline {
         }
 
         stage('SonarCloud Analysis') {
-            steps {
-                withSonarQubeEnv('MySonarCloudServer') {
-                    script {
-                        def services = ['accounts', 'cards', 'loans']
-                        for (svc in services) {
-                            dir(svc) {
-                                echo "Running SonarCloud analysis for ${svc}..."
-                                bat "mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_${svc} -Dsonar.organization=ELMEHDIFATHI"
-                            }
-                        }
-                    }
-                }
+    steps {
+        withSonarQubeEnv('MySonarCloudServer') {
+            dir('accounts') {
+                bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_accounts -Dsonar.organization=ELMEHDIFATHI'
+            }
+            dir('cards') {
+                bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_cards -Dsonar.organization=ELMEHDIFATHI'
+            }
+            dir('loans') {
+                bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_loans -Dsonar.organization=ELMEHDIFATHI'
             }
         }
+    }
+}
+
 
         stage('Package Microservices') {
             steps {

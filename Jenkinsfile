@@ -2,16 +2,19 @@ pipeline {
     agent any
 
     tools {
-    maven 'maven3'
-    jdk 'JDK21'
-}
+        // Use the names configured in Jenkins Global Tool Configuration
+        jdk 'JDK21'           // Java 21
+        maven 'maven3'        // Maven installation
+    }
 
     environment {
-
+        // Ensure MAVEN_HOME is set correctly (Windows)
+        MAVEN_HOME = "C:\\Users\\user\\Downloads\\apache-maven-3.9.11-bin\\apache-maven-3.9.11"
         PATH = "${env.MAVEN_HOME}\\bin;${env.PATH}"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 echo "✅ Checking out develop branch"
@@ -26,58 +29,68 @@ pipeline {
             }
         }
 
-        stage('Build Accounts') {
+        stage('Build Microservices') {
             steps {
-                dir('accounts') {
-                    bat 'mvn clean install -DskipTests'
-                }
-            }
-        }
-
-        stage('Build Cards') {
-            steps {
-                dir('cards') {
-                    bat 'mvn clean install -DskipTests'
-                }
-            }
-        }
-
-        stage('Build Loans') {
-            steps {
-                dir('loans') {
-                    bat 'mvn clean install -DskipTests'
+                script {
+                    def services = ['accounts', 'cards', 'loans']
+                    for (svc in services) {
+                        dir(svc) {
+                            echo "Building ${svc}..."
+                            bat 'mvn clean install -DskipTests'
+                        }
+                    }
                 }
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                dir('accounts') { bat 'mvn test' }
-                dir('cards') { bat 'mvn test' }
-                dir('loans') { bat 'mvn test' }
+                script {
+                    def services = ['accounts', 'cards', 'loans']
+                    for (svc in services) {
+                        dir(svc) {
+                            echo "Running tests for ${svc}..."
+                            bat 'mvn test'
+                        }
+                    }
+                }
             }
         }
 
-        stage('SonarQube Analysis') {
- steps {
-    withSonarQubeEnv('MySonarCloudServer') {
-      bat 'mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_master-springboot-cloud -Dsonar.organization=ELMEHDIFATHI'
-    }
-  }
+        stage('SonarCloud Analysis') {
+            steps {
+                withSonarQubeEnv('MySonarCloudServer') {
+                    script {
+                        def services = ['accounts', 'cards', 'loans']
+                        for (svc in services) {
+                            dir(svc) {
+                                echo "Running SonarCloud analysis for ${svc}..."
+                                bat "mvn sonar:sonar -Dsonar.projectKey=ELMEHDIFATHI_${svc} -Dsonar.organization=ELMEHDIFATHI"
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        stage('Package') {
+        stage('Package Microservices') {
             steps {
-                dir('accounts') { bat 'mvn package -DskipTests' }
-                dir('cards') { bat 'mvn package -DskipTests' }
-                dir('loans') { bat 'mvn package -DskipTests' }
+                script {
+                    def services = ['accounts', 'cards', 'loans']
+                    for (svc in services) {
+                        dir(svc) {
+                            echo "Packaging ${svc}..."
+                            bat 'mvn package -DskipTests'
+                        }
+                    }
+                }
             }
         }
     }
 
     post {
         success {
-            echo "🎉 Build completed successfully!"
+            echo "🎉 All microservices built and analyzed successfully!"
         }
         failure {
             echo "❌ Build failed!"
